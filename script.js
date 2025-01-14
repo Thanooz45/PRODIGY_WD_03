@@ -1,4 +1,3 @@
-
 const board = document.querySelector('#board');
 const cells = document.querySelectorAll('.cell');
 const statusText = document.querySelector('#status');
@@ -30,7 +29,11 @@ function handleCellClick(e) {
   cell.classList.add('taken');
 
   checkWinner();
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+  if (gameActive) {
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    statusText.textContent = `${currentPlayer}'s turn`; 
+  }
 }
 
 function checkWinner() {
@@ -58,8 +61,6 @@ function checkWinner() {
     gameActive = false;
     return;
   }
-
-  statusText.textContent = `Player ${currentPlayer}'s turn`;
 }
 
 function highlightWinningCells(winningCombo) {
@@ -72,13 +73,15 @@ function restartGame() {
   currentPlayer = 'X';
   gameActive = true;
   gameState = ['', '', '', '', '', '', '', '', ''];
-  statusText.textContent = `Player X's turn`;
+  statusText.textContent = `X's turn`;
 
   cells.forEach(cell => {
     cell.textContent = '';
     cell.classList.remove('taken', 'highlight');
   });
 }
+
+statusText.textContent = `X's turn`;
 
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 restartBtn.addEventListener('click', restartGame);
